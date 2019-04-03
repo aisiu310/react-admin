@@ -58,6 +58,7 @@ class LeftNav extends Component {
   }
   
   handleOpenChange = (openKeys) =>{
+    console.log(openKeys)
     this.setState({openKeys})
   }
   handleClick = () => {
