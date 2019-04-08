@@ -7,7 +7,7 @@ import MyButton from '../my-button';
 
 import {reqWeather} from '../../api'
 import { removeItem } from '../../utils/storage-utils';
-import memory from "../../utils/memory-utils";
+import memory from "../../utils/memory-utils"
 import menuList from '../../config/menu-config'
 
 import './index.less';
@@ -23,10 +23,11 @@ Component {
   logout = () => {
     Modal.confirm({
       title: '您确认要退出登录么?',
-      onOK: () => {
+      onOk: () => {
+        console.log(11111);
         memory.user = {}
         removeItem();
-        this.props.history.replace('./login');
+        this.props.history.replace('/login');
       },
       okText: '确认',
       cancelText: '取消'
@@ -41,10 +42,10 @@ Component {
     },1000)
 
     reqWeather('深圳')
-    .then(res => {
-      this.setState({
-        weatherImg:res.weatherImg,
-        weather: res.weather
+      .then(res => {
+        this.setState({
+          weatherImg:res.weatherImg,
+          weather: res.weather
       })
     })
     .catch(err => message.error(err), 2)

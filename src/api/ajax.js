@@ -2,7 +2,7 @@ import axios from 'axios';
 import { message } from 'antd'
 
 export default function ajax(url, data, method = 'GET') {
-  method = method.toUpperCase;
+  method = method.toUpperCase();
 
     let promise = null;
   if(method === 'GET'){

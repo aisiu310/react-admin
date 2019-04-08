@@ -33,10 +33,9 @@ export default class Admin extends Component {
   
 
     const user = getItem();
-    if(!user || !user._id) {
-      return this.props.history.replace('/login')
+    if(user && user._id) {
+      memory.user = user;
     }
-    memory.user = user;
   }
 
   onCollapse = (collapsed) => {
@@ -46,6 +45,9 @@ export default class Admin extends Component {
 
 
   render() {
+    if( !memory.user || !memory.user._id ){
+      return <Redirect to="/login"/>
+    }
     const { collapsed } = this.state;
     const opacity = collapsed ? 0 : 1;
 
