@@ -5,7 +5,7 @@ import {Layout} from 'antd';
 
 import Home from '../home';
 import Category from '../category';
-import Product from '../product';
+import Product from '../product/products';
 import Bar from '../charts/bar';
 import Role from '../role';
 import User from '../user';

@@ -21,13 +21,14 @@ export default class Category extends Component {
       isShowUpdateCategoryNameModal: false,
       category: {},
       parentCategory: {},
-      isShowSubCategories: false
+      isShowSubCategories: false,
+      isLoading: true,
     };
     this.createAddForm = React.createRef();
     this.createUpdateForm = React.createRef();
   }
 
-  isLoading = true;
+  
 
   columns = [
     {
@@ -74,31 +75,34 @@ export default class Category extends Component {
   };
 
   getCategories = async ( parentId ) => {
+    this.setState({isLoading: true});
+
     const result = await reqGetCategories(parentId);
+    const options ={isLoading: false};
+
     if (result.status === 0) {
 
-      const options = {};
+      // const options = {};
 
-      if(result.data.length === 0){
-        this.isLoading = false;
+      // if(result.data.length === 0){
+      //   this.isLoading = false;
 
-        setTimeout (() => {
-          this.isLoading = true;
-        },0)
-      }
+      //   setTimeout (() => {
+      //     this.isLoading = true;
+      //   },0)
+      // }
 
      
       if (parentId === "0") {
         options.categories = result.data;
       
       } else {
-        options. subCategories = result.data;
+        options.subCategories = result.data;
       }
-      this.setState(options);
-
     } else {
       message.error(result.msg);
     }
+    this.setState(options);
   };
 
   componentDidMount() {
@@ -117,19 +121,15 @@ export default class Category extends Component {
         if (result.status === 0) {
           message.success("添加分类成功~");
 
+          const options = {isShowAddCategoryModal: false}
           if(parentId === '0') {
-          this.setState({
-            isShowAddCategoryModal: false,
-            categories: [...this.state.categories, result.data]
-          });
-        }else if(parentId === this.state.parentCategory._id){
-            this.setState({
-              isShowAddCategoryModal: false,
-              subCategories:
+            options.categories= [...this.state.categories, result.data]
+         
+        }else if(parentId === this.state.parentCategory._id){  
+              options.subCategories=
               [...this.state.subCategories, result.data]
-            })
           }
-          
+          this.setState(options);
         } else {
           message.error(result.msg);
         }
@@ -173,11 +173,12 @@ export default class Category extends Component {
 
   changeModal = (name, isShow) => {
     return () => {
+      if(name === 'isShowUpdateCategoryNameModal' && isShow === false)this.createUpdateForm.current.props.form.resetFields()
       this.setState({
         [name]: isShow
-      });
-    };
-  };
+      })
+    }
+  }
   goBack = () => {
     this.setState({
       isShowSubCategories: false
@@ -191,7 +192,8 @@ export default class Category extends Component {
       isShowUpdateCategoryNameModal,
       category: { name },
       parentCategory,
-      isShowSubCategories
+      isShowSubCategories,
+      isLoading
     } = this.state;
 
     return (
@@ -217,7 +219,10 @@ export default class Category extends Component {
           }}
           rowKey="_id"
 
-          loading={isShowSubCategories ? this.isLoading&& !subCategories.length : this.isLoading && !categories.length}
+          // loading={isShowSubCategories
+          //   ? this.isLoading&& !subCategories.length 
+          //   : this.isLoading && !categories.length}
+          loading={isLoading}
         />
 
         <Modal
